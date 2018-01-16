@@ -13,3 +13,4 @@ while message != 'q':
 	print("receive from Server:" + bytes.decode(data))
 	message = input("->")
 s.close()
+# add a comment for test
