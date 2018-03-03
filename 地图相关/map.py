@@ -13,13 +13,6 @@ class LeastCover:
 	最小覆盖矩形
 	"""
 
-	# def __init__(self,up,down,left,right):
-	# 	self.up = up
-	# 	self.down = down
-	# 	self.left = left
-	# 	self.right = right
-
-
 	def __init__(self,jingweidu):
 		self.up = max(jingweidu.weiduList)
 		self.down = min(jingweidu.weiduList)
@@ -227,45 +220,12 @@ class FileHandle(object):
 					f.write(',' + str(self.matrix[i][j]))
 				f.write('\n')
 
-
-		
-
-
-
-
-
-me = Measure()
+#主程序
 k = FileHandle('C:\maps')
 k.initialMatrix()
 k.ultimateProcessor()
 k.printCsv()
 
-# print(k.files[1])
-# print(k.areaList[1].jingduList)
-# print(k.areaList[1].weiduList)
-
-
-# print(k.files[2])
-# print(k.areaList[2].jingduList)
-# print(k.areaList[2].weiduList)
-
-
-# mindis = me.shortestDis(k.areaList[1],k.areaList[2])
-# print(mindis)
-
-
-# for i in range(len(k.matrix)):
-# 	for j in range(len(k.matrix)):
-# 		print(k.matrix[i][j])
-# 	print('\n')
-
-
-
-
-
-
-# temp = me.haversine(k.areaList[1].jingduList[0],k.areaList[1].weiduList[0],k.areaList[2].jingduList[0],k.areaList[2].weiduList[0])
-# print(temp)
 
 
 
