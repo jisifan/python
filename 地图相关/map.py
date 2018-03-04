@@ -1,6 +1,7 @@
 import os
 from math import radians, cos, sin, asin, sqrt
 import csv
+import sys
 
 #容忍的最小距离
 tolerance = 2000
@@ -103,6 +104,8 @@ class Measure:
 				# print(str(setA.jingduList[i])+ ',' + str(setA.weiduList[i]) + ',' + str(setB.jingduList[j]) + ',' + str(setB.weiduList[j]))
 				temp = self.haversine(setA.jingduList[i],setA.weiduList[i],setB.jingduList[j],setB.weiduList[j])
 				# print(temp)
+				if temp <= tolerance:
+					return tolerance
 				if temp < shortest:
 					shortest = temp
 		return shortest
@@ -154,6 +157,18 @@ class FileHandle(object):
 			print(filename + " done")
 		return([jingweidu,leastCover])
 
+	def fileCheck(self):
+		"""
+		检测文件有没有下错的
+		"""
+		for file in self.files:
+			filename = self.root + '\\' + file
+			with open(filename,'r',encoding = 'UTF-8') as f:
+				k = f.read()
+				countyName = k.split("<name>")[2].split("</name>")[0]
+				if countyName != file.split(',')[0]:
+					sys.stdout.write(str(file)+"	"+countyName+'\n')
+
 
 	def getBoundList(self):
 		"""
@@ -193,14 +208,14 @@ class FileHandle(object):
 				if self.matrix[i][j] == 2:
 					#比较这两个集合中的所有点之间的距离，取最小的
 					shortest = me.shortestDis(self.areaList[i],self.areaList[j])
-					print(shortest)
 					#如果两个集合之间的最短距离小于容忍度，则记为两县交界，否则记为不交界
-					if shortest < tolerance:
+					if shortest <= tolerance:
 						self.matrix[i][j] = 1
 						self.matrix[j][i] = 1
 					else:
 						self.matrix[i][j] = 0
 						self.matrix[j][i] = 0
+			print(i)
 
 	#todo 打印成csv
 	def printCsv(self):
@@ -211,17 +226,19 @@ class FileHandle(object):
 			#写第一行
 			f.write('')
 			for i in range(len(self.files)):
-				f.write(',' + self.files[i].split(".kml")[0])
+				f.write(',' + self.files[i].split(".kml")[0].replace(',','_'))
 			f.write('\n')
 			#写之后所有行
 			for i in range(len(self.files)):
-				f.write(self.files[i].split(".kml")[0])
+				f.write(self.files[i].split(".kml")[0].replace(',','_'))
 				for j in range(len(self.files)):
 					f.write(',' + str(self.matrix[i][j]))
 				f.write('\n')
 
 #主程序
 k = FileHandle('C:\maps')
+# 检查文件是否有下载错误，以及命名的不同
+# k.fileCheck()
 k.initialMatrix()
 k.ultimateProcessor()
 k.printCsv()
